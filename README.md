@@ -96,29 +96,6 @@ Ensure the following requirements are met before running the application:
    - Use the "Logout" button to securely end your session when done.
 
 ---
-
-## Changelog
-
-### Version 1.0.0 (Stable)
-- Initial release of GeoPoly Mapper.
-- Integrated WebODM dashboard within the app.
-- Basic flight boundary creation and export functionality.
-
-### Version 1.1.0 
-- **UI Updates**:
-  - Improved layout for better UI experience and responsiveness.
-  - Adjusted button positioning for better visibility and usability.
-  - Resolved problem with the horizontal scroll on smaller screens.
-  - Enhanced mobile responsiveness.
-
-### Planned Features
-- Advanced multispectral image analysis.
-- Integration with cloud-based UAV services.
-- Real-time UAV telemetry visualization.
-- Enhanced user interface for drawing and editing.
-
----
-
 ## Expected Outcomes
 
 - Generate accurate flight plan boundaries based on processed geographic imagery.
@@ -126,7 +103,6 @@ Ensure the following requirements are met before running the application:
 - Provide a flexible platform for future feature additions.
 
 ---
-
 ## Contribution
 
 Contributions are welcome! To contribute:
@@ -150,7 +126,8 @@ Contributions are welcome! To contribute:
 ## License
 This project is open-source and available under the [MIT License](/LICENSE).
 
----
+## Changelog
 
+For details about the project's version history, refer to the [CHANGELOG.md](/CHANGELOG.md).
 
 
