@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css"/>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+
+    #sidebar {
+      width: 300px;
+      background: white;
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      z-index: 1000;
+      overflow-y: auto;
+    }
+
+    #map-container {
+      flex: 1;
+      position: relative;
+    }
+
+    #map {
+      height: 100%;
+      width: 100%;
+    }
+
+    .control-section {
+      margin-bottom: 20px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    h3 {
+      margin: 0 0 10px 0;
+      color: #333;
+    }
+
+    select, input[type="file"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    input[type="range"] {
+      flex: 1;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    button:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+    }
+
+    .message {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .success { background: #d4edda; color: #155724; }
+    .error { background: #f8d7da; color: #721c24; }
+    .loading { background: #fff3cd; color: #856404; }
+
+    #loadingSpinner {
+      display: none;
+      text-align: center;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="sidebar">
+    <div class="control-section">
+      <h3>Base Map</h3>
+      <select id="baseMapSelect">
+        <option value="satellite">Satellite</option>
+        <option value="osm">OpenStreetMap</option>
+        <option value="hybrid">Hybrid</option>
+      </select>
+    </div>
+
+    <div class="control-section">
+      <h3>Image Upload</h3>
+      <input type="file" id="geotiff-file" accept=".tif,.tiff">
+      <div id="loadingSpinner">Loading image...</div>
+    </div>
+
+    <div class="control-section">
+      <h3>Image Controls</h3>
+      <div class="slider-container">
+        <label>Opacity:</label>
+        <input type="range" id="opacitySlider" min="0" max="100" value="100">
+        <span id="opacityValue">100%</span>
+      </div>
+    </div>
+
+    <div class="control-section">
+      <h3>Export</h3>
+      <button id="exportGeoJSON" disabled>Export GeoJSON</button>
+      <button id="exportBYWP" disabled>Export BYWP</button>
+    </div>
+
+    <div id="message" class="message"></div>
+  </div>
+
+  <div id="map-container">
+    <div id="map"></div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+  <script src="https://unpkg.com/georaster"></script>
+  <script src="https://unpkg.com/georaster-layer-for-leaflet@3.10.0/dist/georaster-layer-for-leaflet.min.js"></script>
+  <!-- <script src="https://unpkg.com/georaster-layer-for-leaflet"></script> -->
+
+  <script>
+    // Initialize map
+    var map = L.map('map').setView([0, 0], 2);
+    var currentBaseLayer;
+    var imageLayer;
+    var drawnItems;
+
+    // Base layers
+    var baseLayers = {
+      satellite: L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+        attribution: '© Google'
+      }),
+      osm: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }),
+      hybrid: L.tileLayer('https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+        attribution: '© Google'
+      })
+    };
+
+    // Set default satellite layer
+    currentBaseLayer = baseLayers.satellite;
+    currentBaseLayer.addTo(map);
+
+    // Initialize drawing feature group
+    drawnItems = new L.FeatureGroup();
+    map.addLayer(drawnItems);
+
+    // Initialize draw control
+    var drawControl = new L.Control.Draw({
+      draw: {
+        polygon: true,
+        polyline: false,
+        rectangle: false,
+        circle: false,
+        circlemarker: false,
+        marker: false
+      },
+      edit: {
+        featureGroup: drawnItems
+      }
+    });
+    map.addControl(drawControl);
+
+    // UI Elements
+    var messageEl = document.getElementById('message');
+    var loadingSpinner = document.getElementById('loadingSpinner');
+    var exportGeoJSONBtn = document.getElementById('exportGeoJSON');
+    var exportBYWPBtn = document.getElementById('exportBYWP');
+    var opacitySlider = document.getElementById('opacitySlider');
+    var opacityValue = document.getElementById('opacityValue');
+
+    function showMessage(text, type) {
+      messageEl.textContent = text;
+      messageEl.className = `message ${type}`;
+    }
+
+    // Handle base map changes
+    document.getElementById('baseMapSelect').addEventListener('change', function(e) {
+      if (currentBaseLayer) {
+        map.removeLayer(currentBaseLayer);
+      }
+      currentBaseLayer = baseLayers[e.target.value];
+      currentBaseLayer.addTo(map);
+      
+      if (imageLayer) {
+        imageLayer.bringToFront();
+      }
+    });
+
+    // Handle opacity changes
+    opacitySlider.addEventListener('input', function(e) {
+      const opacity = parseInt(e.target.value) / 100;
+      opacityValue.textContent = `${e.target.value}%`;
+      if (imageLayer) {
+        imageLayer.setOpacity(opacity);
+      }
+    });
+
+    // Handle GeoTIFF upload
+    document.getElementById("geotiff-file").addEventListener("change", function(event) {
+      var file = event.target.files[0];
+      if (!file) return;
+
+      loadingSpinner.style.display = 'block';
+      showMessage('Loading image...', 'loading');
+
+      var reader = new FileReader();
+      reader.readAsArrayBuffer(file);
+      
+      reader.onloadend = function() {
+        var arrayBuffer = reader.result;
+        parseGeoraster(arrayBuffer).then(georaster => {
+          if (imageLayer) {
+            map.removeLayer(imageLayer);
+          }
+          
+          imageLayer = new GeoRasterLayer({
+            georaster: georaster,
+            opacity: opacitySlider.value / 100,
+            resolution: 256
+          });
+          
+          imageLayer.addTo(map);
+          map.fitBounds(imageLayer.getBounds());
+          
+          showMessage('GeoTIFF loaded successfully!', 'success');
+          loadingSpinner.style.display = 'none';
+        }).catch(error => {
+          console.error('Error parsing GeoTIFF:', error);
+          showMessage('Error loading GeoTIFF. Please try again.', 'error');
+          loadingSpinner.style.display = 'none';
+        });
+      };
+
+      reader.onerror = function(error) {
+        console.error('File reading error:', error);
+        showMessage('Error reading file. Please try again.', 'error');
+        loadingSpinner.style.display = 'none';
+      };
+    });
+
+    // Handle drawing events
+    map.on('draw:created', function(e) {
+      drawnItems.addLayer(e.layer);
+      exportGeoJSONBtn.disabled = false;
+      exportBYWPBtn.disabled = false;
+    });
+
+    map.on('draw:deleted', function() {
+      if (drawnItems.getLayers().length === 0) {
+        exportGeoJSONBtn.disabled = true;
+        exportBYWPBtn.disabled = true;
+      }
+    });
+
+    // Export functions
+    function downloadFile(content, filename) {
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    exportGeoJSONBtn.addEventListener('click', function() {
+      const geojson = drawnItems.toGeoJSON();
+      downloadFile(JSON.stringify(geojson, null, 2), 'polygon.geojson');
+    });
+
+    exportBYWPBtn.addEventListener('click', function() {
+      const layers = drawnItems.getLayers();
+      if (layers.length === 0) return;
+
+      const polygon = layers[0];
+      const coordinates = polygon.getLatLngs()[0];
+      
+      let bywpContent = '@Saved by BOYING,WP\n';
+      bywpContent += '0\tFR\n';
+      bywpContent += '0.0\tZA\n';
+      bywpContent += 'false\tPT\n';
+      bywpContent += '0\tNM\n';
+
+      coordinates.forEach(coord => {
+        bywpContent += `0\t0\t0\t0\t0\t0\t0\t0\t${coord.lat}\t${coord.lng}\t0\tnull\t0.0\t\t1\tPP\n`;
+      });
+
+      downloadFile(bywpContent, 'polygon.bywp');
+    });
+  </script>
+</body>
+</html>
+
+<!-- 
+Key fixes in this version:
+
+Fixed Leaflet Draw initialization:
+
+Corrected library versions and import order
+Fixed the polygon drawing tool configuration
+
+
+Fixed base map switching:
+
+Corrected layer management
+Properly handles layer switching while maintaining image overlay
+
+
+Fixed image upload:
+
+Reverted to more stable image handling code
+Better error handling and messages
+
+
+Improved stability:
+
+Using stable versions of all libraries
+Better error handling throughout
+More reliable initialization
+
+
+-->
