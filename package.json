@@ -1,6 +1,6 @@
 {
-  "name": "my-webodm-app",
-  "version": "0.1.0",
+  "name": "GeoPoly-Mapper",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.4",

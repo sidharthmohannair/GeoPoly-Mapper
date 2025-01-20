@@ -59,7 +59,6 @@ function App() {
       case 1:
         return (
           <div>
-            <h3 className="small-header">Step 1: Process Images (WebODM)</h3>
             <iframe
               src={`${WEBODM_URL}/dashboard/`}
               className="webodm-iframe"
@@ -70,7 +69,6 @@ function App() {
       case 2:
         return (
           <div>
-            <h3 className="small-header">Step 2: View & Draw</h3>
             <iframe
               src="/page2.html"
               className="page2-iframe"
@@ -116,20 +114,25 @@ function App() {
           <header className="dashboard-header">
             <h2 className="small-header"> GeoPoly Mapper</h2>
             <div className="logout-container">
-              <button onClick={logout} className="logout-button">Logout </button>
+              <button onClick={logout} className="logout-button">Logout</button>
             </div>
           </header>
           <div className="wizard-container">
             <div className="wizard-steps">
               {renderStepContent()}
-              <div className="wizard-navigation">
-                <button onClick={prevStep} disabled={currentStep === 1} className="nav-button">
-                  Previous
-                </button>
-                <button onClick={nextStep} disabled={currentStep === 2} className="nav-button">
-                  Next
-                </button>
-              </div>
+            </div>
+          </div>
+          <div className="wizard-navigation">
+            <h3 className="small-header">
+              {currentStep === 1 ? 'Step 1: Process Images (WebODM)' : 'Step 2: View & Draw'}
+            </h3>
+            <div>
+              <button onClick={prevStep} disabled={currentStep === 1} className="nav-button">
+                Previous
+              </button>
+              <button onClick={nextStep} disabled={currentStep === 2} className="nav-button">
+                Next
+              </button>
             </div>
           </div>
         </div>
