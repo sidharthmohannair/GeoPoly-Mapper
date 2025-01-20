@@ -1,5 +1,7 @@
 # GeoPoly Mapper
 
+![GeoPoly Mapper UI image](/images/GeoPoly_UI_2.png)
+
 **GeoPoly Mapper** is a powerful web application designed to assist in UAV flight planning. It enables users to generate precise flight boundaries (outer polygons) using processed orthophotos or multispectral imagery. The tool is tailored for applications such as agricultural spraying, terrain mapping, and environmental monitoring. With its modular design, this application is set to evolve with advanced features in future releases.
 
 ---
@@ -42,7 +44,7 @@ Ensure the following requirements are met before running the application:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/geopoly-mapper.git
+   git clone https://github.com/sidharthmohannair/GeoPoly-Mapper.git
    cd geopoly-mapper
    ```
 
