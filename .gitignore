@@ -1,23 +1,45 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
-
-# testing
-/coverage
-
-# production
-/build
-
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
+# Node.js dependencies
+node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# React build artifacts
+build/
+dist/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+*.out
+*.pid
+*.pid.lock
+
+# WebODM integrations
+webodm_temp/
+
+# Environment files
+.env
+.env.local
+
+# IDE configurations
+.vscode/
+.idea/
+
+# Coverage reports
+coverage/
+
+# Git-specific files
+*.orig
+
+# Others
+*.bak
+*.swp
+*.tmp
+*.temp
+*.lock
+
