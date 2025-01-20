@@ -1,6 +1,9 @@
+
+
+
 # GeoPoly Mapper
 
-![GeoPoly Mapper UI image](/images/GeoPoly_UI_2.png)
+![GeoPoly Mapper UI image](/images/geopoymapper_ui.gif)
 
 **GeoPoly Mapper** is a powerful web application designed to assist in UAV flight planning. It enables users to generate precise flight boundaries (outer polygons) using processed orthophotos or multispectral imagery. The tool is tailored for applications such as agricultural spraying, terrain mapping, and environmental monitoring. With its modular design, this application is set to evolve with advanced features in future releases.
 
@@ -52,33 +55,45 @@ Ensure the following requirements are met before running the application:
    ```bash
    npm install
    ```
+3. Start the WebODM server:
 
-3. Start the application:
+   - Navigate to your WebODM installation directory.
+   - Run the following command:
+   ```bash
+   ./webodm.sh start
+   ```
+   - Ensure WebODM is running and accessible at http://localhost:8000.
+
+
+4. Start the GeoPoly Mapper application from `/GeoPoly-Mapper` directory :
    ```bash
    npm start
    ```
 
-4. Open the application in your browser at [http://localhost:3000](http://localhost:3000).
+5. Open the **GeoPoly Mapper** application in your browser at 
+   > [http://localhost:3000](http://localhost:3000)
 
 ---
 
 ## How to Use
 
-1. **Login:**
+1. **Start WebODM:**
+   - Ensure the WebODM server is running **before launching GeoPoly Mapper**.
+2. **Login:**
    - Enter your WebODM credentials on the login screen.
-   - Connect to the WebODM server.
+   - Click "**Connect to WebODM**" to establish a session.
 
-2. **Step 1:** Process Orthophotos
+3. **Step 1:** Process Orthophotos
    - Access the WebODM dashboard within the app.
    - Upload and process your imagery.
 
-3. **Step 2:** Define Flight Plan
+4. **Step 2:** Define Flight Plan
    - Switch to the flight plan creation tool.
    - Use the interface to analyze and define flight boundaries.
    - Export the finalized flight plan for UAV operations.
 
-4. **Logout:**
-   - Use the "Logout" button to securely end your session.
+5. **Logout:**
+   - Use the "Logout" button to securely end your session when done.
 
 ---
 
@@ -88,6 +103,13 @@ Ensure the following requirements are met before running the application:
 - Initial release of GeoPoly Mapper.
 - Integrated WebODM dashboard within the app.
 - Basic flight boundary creation and export functionality.
+
+### Version 1.1.0 
+- **UI Updates**:
+  - Improved layout for better UI experience and responsiveness.
+  - Adjusted button positioning for better visibility and usability.
+  - Resolved problem with the horizontal scroll on smaller screens.
+  - Enhanced mobile responsiveness.
 
 ### Planned Features
 - Advanced multispectral image analysis.
@@ -99,7 +121,7 @@ Ensure the following requirements are met before running the application:
 
 ## Expected Outcomes
 
-- Generate accurate flight plans based on processed geographic imagery.
+- Generate accurate flight plan boundaries based on processed geographic imagery.
 - Improve efficiency in UAV applications such as spraying and mapping.
 - Provide a flexible platform for future feature additions.
 
