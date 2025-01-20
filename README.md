@@ -1,70 +1,132 @@
-# Getting Started with Create React App
+# GeoPoly Mapper
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**GeoPoly Mapper** is a powerful web application designed to assist in UAV flight planning. It enables users to generate precise flight boundaries (outer polygons) using processed orthophotos or multispectral imagery. The tool is tailored for applications such as agricultural spraying, terrain mapping, and environmental monitoring. With its modular design, this application is set to evolve with advanced features in future releases.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Flight Boundary Definition:** Easily create accurate flight boundaries from orthophotos.
+- **Terrain Analysis:** Analyze geographic data to optimize UAV operations.
+- **Exportable Flight Plans:** Generate actionable plans ready for UAV integration.
+- **Use Cases:**
+  - Agricultural spraying for targeted resource application.
+  - Mapping for topographical and infrastructural planning.
+  - Environmental monitoring and assessment.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Prerequisites
 
-### `npm test`
+Ensure the following requirements are met before running the application:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. **System Requirements:**
+   - OS: Windows, macOS, or Linux.
+   - RAM: Minimum 4 GB.
+   - Storage: Minimum 500 MB free space.
 
-### `npm run build`
+2. **Dependencies:**
+   - Node.js (v16 or later)
+   - React (for development)
+   - WebODM (for UAV image processing)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. **Installation Requirements:**
+   - A WebODM instance running locally or accessible via URL.
+   - A browser that supports modern JavaScript features (Chrome/Firefox recommended).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Getting Started
 
-### `npm run eject`
+### Installation
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/geopoly-mapper.git
+   cd geopoly-mapper
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+3. Start the application:
+   ```bash
+   npm start
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+4. Open the application in your browser at [http://localhost:3000](http://localhost:3000).
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## How to Use
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. **Login:**
+   - Enter your WebODM credentials on the login screen.
+   - Connect to the WebODM server.
 
-### Code Splitting
+2. **Step 1:** Process Orthophotos
+   - Access the WebODM dashboard within the app.
+   - Upload and process your imagery.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+3. **Step 2:** Define Flight Plan
+   - Switch to the flight plan creation tool.
+   - Use the interface to analyze and define flight boundaries.
+   - Export the finalized flight plan for UAV operations.
 
-### Analyzing the Bundle Size
+4. **Logout:**
+   - Use the "Logout" button to securely end your session.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+## Changelog
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Version 1.0.0 (Stable)
+- Initial release of GeoPoly Mapper.
+- Integrated WebODM dashboard within the app.
+- Basic flight boundary creation and export functionality.
 
-### Advanced Configuration
+### Planned Features
+- Advanced multispectral image analysis.
+- Integration with cloud-based UAV services.
+- Real-time UAV telemetry visualization.
+- Enhanced user interface for drawing and editing.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+## Expected Outcomes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- Generate accurate flight plans based on processed geographic imagery.
+- Improve efficiency in UAV applications such as spraying and mapping.
+- Provide a flexible platform for future feature additions.
 
-### `npm run build` fails to minify
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Contribution
+
+Contributions are welcome! To contribute:
+1. Fork the repository.
+2. Create a new branch:
+   ```bash
+   git checkout -b feature-name
+   ```
+3. Commit your changes:
+   ```bash
+   git commit -m "Add new feature"
+   ```
+4. Push to the branch:
+   ```bash
+   git push origin feature-name
+   ```
+5. Open a pull request.
+
+---
+
+## License
+This project is open-source and available under the [MIT License](/LICENSE).
+
+---
+
+
+
